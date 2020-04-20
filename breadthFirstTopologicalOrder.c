@@ -5,8 +5,8 @@
 #define true 1
 
 
-// Initialize the first graph according to the material given
-int graph1[VERTEX_COUNT][VERTEX_COUNT] = {
+// Initialize the graph
+int graph[VERTEX_COUNT][VERTEX_COUNT] = {
 //       v0     v1     v2     v3     v4     v5     v6     v7     v8     v9
 /*v0*/  {false, true,  false, false, false, true,  false, false, false, false},
 /*v1*/  {false, false, false, false, false, false, false, true,  false, false},
@@ -20,34 +20,22 @@ int graph1[VERTEX_COUNT][VERTEX_COUNT] = {
 /*v9*/  {false, false, false, false, true,  false, false, false, false, false}
 };
 
-// Initialize the second graph according to the material given
-int graph2[VERTEX_COUNT][VERTEX_COUNT] = {
-//       v0     v1     v2     v3     v4     v5     v6     v7     v8     v9
-/*v0*/  {false, true,  false, false, false, true,  false, false, false, false},
-/*v1*/  {false, false, false, false, false, false, false, true,  false, false},
-/*v2*/  {false, false, false, false, false, false, false, false, false, false},
-/*v3*/  {false, false, true,  false, true,  false, false, true,  true,  false},
-/*v4*/  {false, false, false, false, false, false, false, false, true,  false},
-/*v5*/  {false, false, false, false, false, false, false, false, false, false},
-/*v6*/  {true,  true,  true,  false, false, false, false, false, false, false},
-/*v7*/  {false, false, false, false, false, false, false, false, false, false},
-/*v8*/  {false, false, false, false, false, false, false, true,  false, false},
-/*v9*/  {false, false, false, false, true,  false, false, false, false, false}
-};
-
-// In order to see if a value is in an array I created a separate function
+// In order to see if a value is in an array use this function
+// This function takes; 1: the value that you wish to be checked, 2: The array, 3: the size of the array as input.
 int isInArray(int value, int array[], int arraySize)
 {
     int i;
     for(i = 0; i < arraySize; i++)
     {
         if(array[i] == value)
+            // If the value is within the array return 1
             return 1;
     }
+    // If it is not in the array return 0
     return 0;
 }
 
-// Append to the end of array
+// this function takes; 1: the value that is wished to be appended, 2: the array where the values will be stored, 3: the free position index of the array(Where the value will be appended to)
 int appendToArray(int value, int array[], int freePos){
     array[freePos] = value;
     freePos += 1;
@@ -55,6 +43,7 @@ int appendToArray(int value, int array[], int freePos){
 }
 
 // Sometimes the array has to be reset and if we reset it using memset() or other methods "0" will be seen in the array, to get the correct result every index has to be made -1.
+// This function takes; 1: the array that will be voided, 2: the length of the array as inputs. Resets the free position by returning 0.
 int nullifyArray(int array[], int arrayLength){
     for(int i=0;i<arrayLength;i++){
         array[i] = -1;
@@ -63,6 +52,7 @@ int nullifyArray(int array[], int arrayLength){
 }
 
 // Given the graph this function will return an array with the in-degrees of every vertex
+// This function takes the graph as input and returns the pointer of the in-degree array as output.
 int * findIndegree(int graphArray[VERTEX_COUNT][VERTEX_COUNT]){
     // Allocate memory for the array which will store the in-degree values
     int * indegreeArray = malloc(sizeof(int)*VERTEX_COUNT);
@@ -85,6 +75,7 @@ int * findIndegree(int graphArray[VERTEX_COUNT][VERTEX_COUNT]){
 };
 
 // This function calculates the topological order from the given graph
+// This function takes the graph as input and returns the pointer of the topological order array as the output.
 int * findOrder(int graphArray[VERTEX_COUNT][VERTEX_COUNT]){
     // Calculate in-degree of given graph
     int * indegreeArray = findIndegree(graphArray);
@@ -135,23 +126,14 @@ int * findOrder(int graphArray[VERTEX_COUNT][VERTEX_COUNT]){
 int main()
 {
     // Initialize the pointers where the address of the outputs will be stored
-    int * order1, * order2;
-    int i;
-
-    // Calculate orders
-    order1 = findOrder(graph1);
-    order2 = findOrder(graph2);
+    int * order;
+    // Calculate order
+    order = findOrder(graph);
     // Print the outputs
     printf("\n");
-    printf("The topological order for graph1 is:\n");
-    for(i=0;i<10;i++){
-        printf("%d ",order1[i]);
+    printf("The topological order for the graph is:\n");
+    for(int i=0;i<10;i++){
+        printf("%d ",order[i]);
     }
-
-    printf("\nThe topological order for graph2 is:\n");
-    for(i=0;i<10;i++){
-        printf("%d ",order2[i]);
-    }
-    printf("\n");
     return 0;
 }
